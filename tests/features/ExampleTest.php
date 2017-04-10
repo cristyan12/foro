@@ -1,14 +1,8 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-
-class ExampleTest extends TestCase
-{
-    use DatabaseTransactions;
-    
-    public function testBasicExample()
+class ExampleTest extends FeatureTestCase
+{    
+    function test_basic_example()
     {
         $name = 'Cristyan Valera';
         $email = 'admin@beleriand.com';
