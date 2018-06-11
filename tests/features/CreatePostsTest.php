@@ -35,8 +35,8 @@ class CreatePostsTest extends FeatureTestCase
 			->visit(route('posts.create'))
 			->press('Publicar')
 			->seePageIs(route('posts.create'))
-			->assertSee('El campo título es obligatorio')
-			->assertSee('El campo contenido es obligatorio');
+			->see('El campo título es obligatorio')
+			->see('El campo contenido es obligatorio');
 	}
 	
 }
