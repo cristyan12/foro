@@ -21,7 +21,7 @@ class ShowPostTest extends TestCase
 
     	// Act && Assert
     	$user->posts()->save($post);
-    	
+
     	$this->visit(route('posts.show', $post))
     		->seeInElement('h1', $post->title)
     		->see($post->content)
