@@ -11,8 +11,6 @@ class ShowPostController extends Controller
 	{
 		$posts = Post::orderBy('created_at', 'DESC')->paginate();
 
-		// dd($posts->pluck('created_at')->toArray());
-
 		return view('posts.index', compact('posts'));
 	}
 
