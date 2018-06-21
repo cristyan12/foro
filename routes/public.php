@@ -1,8 +1,9 @@
 <?php
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [
+	'uses' => 'ShowPostController@index',
+	'as' => 'posts.index'
+]);
 
 Auth::routes();
 
