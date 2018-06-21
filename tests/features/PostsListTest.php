@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 class PostsListTest extends FeatureTestCase
 {
 	/** @test */
@@ -14,5 +16,32 @@ class PostsListTest extends FeatureTestCase
         	->see($post->title)
         	->click($post->title)
         	->seePageIs($post->url);
+    }
+
+    /** @test */
+    function the_posts_are_paginated()
+    {
+        // Arrange
+        $first = factory(\App\Post::class)->create([
+            'title' => 'Post mas antiguo',
+            'created_at' => Carbon::now()->subDays(2)
+        ]);
+
+        factory(\App\Post::class)->times(15)->create([
+            'created_at' => Carbon::now()->subDay()
+        ]);
+
+        $last = factory(\App\Post::class)->create([
+            'title' => 'Post mas reciente',
+            'created_at' => Carbon::now()
+        ]);
+
+        // Act
+        $this->visit('/')
+            ->see($last->title)
+            ->dontSee($first->title)
+            ->click('2')
+            ->see($first->title)
+            ->dontSee($last->title);
     }
 }
