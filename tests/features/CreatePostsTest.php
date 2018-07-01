@@ -1,4 +1,5 @@
 <?php
+use App\Post;
 
 class CreatePostsTest extends FeatureTestCase
 {
@@ -26,7 +27,15 @@ class CreatePostsTest extends FeatureTestCase
 			'slug' => 'esta-es-una-pregunta'
 		]);
 
-		$this->see('Esta es una pregunta');
+		$post = Post::first();
+
+		// Test the author is subscribed automatically to the post
+		$this->seeInDatabase('subscriptions', [
+            'user_id' => $user->id,
+            'post_id' => $post->id
+        ]);
+        
+		$this->seePageIs($post->url);
 	}
 
 	/** @test */
