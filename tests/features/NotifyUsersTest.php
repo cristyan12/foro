@@ -1,4 +1,4 @@
-<?php
++<?php
 use App\User;
 use App\Notifications\PostCommented;
 use Illuminate\Support\Facades\Notification;

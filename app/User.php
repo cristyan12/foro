@@ -67,14 +67,9 @@ class User extends Authenticatable
 
         Notification::send(
             $post->subscribers()->where('users.id', '!=', $this->id)->get(),
-            new PostCommented($this, $comment)
+            new PostCommented($comment)
         );
-
-        // Notification::send(
-        //     $post->subscribers()->where('users.id', '!=', $this->id)->get(),
-        //     new PostCommented($this, $comment)
-        // );
-
+        
         return $comment;
     }
 
