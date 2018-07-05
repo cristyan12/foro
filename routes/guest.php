@@ -1,9 +1,10 @@
 <?php
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('register', [
+    'uses' => 'RegisterController@create',
+    'as' => 'register'
+]);
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index');
+Route::post('register', [
+    'uses' => 'RegisterController@store'
+]);
