@@ -42,11 +42,29 @@ class RegistrationTest extends FeatureTestCase
             return $mail->token->id == $token->id;
         });
 
-        return;
-        
         // todo: Finish this feature
         $this->seeRouteIs('register_confirmation')
             ->see('Gracias por registrarte')
             ->see('Enviamos a tu correo un enlace para que inicies sesión');
+    }
+    
+    /** @test */
+    function it_register_form_validation()
+    {
+        // Arrange
+        Mail::fake();
+        
+        // Act
+        $this->visitRoute('register')
+            ->press('Regístrate');
+
+        // Assert
+        $this->seePageIs(route('register'))
+            ->seeErrors([
+                'email' => 'El campo correo electrónico es obligatorio',
+                'username' => 'El campo usuario es obligatorio',
+                'first_name' => 'El campo nombre es obligatorio',
+                'last_name' => 'El campo apellido es obligatorio',
+            ]);
     }
 }
