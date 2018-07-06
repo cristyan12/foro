@@ -45,6 +45,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Post::class, 'subscriptions');
     }
 
+    public function getNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
     public function createPost(array $data)
     {
         $post = new Post($data);

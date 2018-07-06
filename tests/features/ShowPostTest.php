@@ -7,7 +7,8 @@ class ShowPostTest extends FeatureTestCase
     {
     	// Arrange
     	$user = $this->defaultUser([
-    		'name' => 'Cristyan Valera',
+            'first_name' => 'Cristyan',
+    		'last_name' => 'Valera',
             'email' => 'cristyan12@mail.com'
     	]);
 

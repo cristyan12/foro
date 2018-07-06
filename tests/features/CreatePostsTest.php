@@ -39,11 +39,11 @@ class CreatePostsTest extends FeatureTestCase
 	}
 
 	/** @test */
-	function creating_a_post_requires_authentication()
-	{
-		$this->visit(route('posts.create'))
-			->seePageIs(route('login'));
-	}
+	// function creating_a_post_requires_authentication()
+	// {
+	// 	$this->visit(route('posts.create'))
+	// 		->seePageIs(route('login'));
+	// }
 
 	/** @test */
 	function create_post_form_validation()
