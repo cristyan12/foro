@@ -14,6 +14,16 @@ Route::get('register_confirmation', [
     'as' => 'register_confirmation'
 ]);
 
+Route::get('login', [
+	'uses' => 'LoginController@create',
+	'as' => 'login'
+]);
+
+Route::post('login', [
+    'uses' => 'LoginController@store'
+]);
+
 Route::get('register_confirmation', function() {
 	return view('register.confirm');
 })->name('register_confirmation');
+
