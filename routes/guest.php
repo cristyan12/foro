@@ -14,16 +14,21 @@ Route::get('register_confirmation', [
     'as' => 'register_confirmation'
 ]);
 
-Route::get('login', [
-	'uses' => 'LoginController@create',
-	'as' => 'login'
+Route::get('token', [
+	'uses' => 'TokenController@create',
+	'as' => 'token'
 ]);
 
-Route::post('login', [
-    'uses' => 'LoginController@store'
+Route::post('token', [
+    'uses' => 'TokenController@store'
 ]);
 
 Route::get('register_confirmation', function() {
 	return view('register.confirm');
 })->name('register_confirmation');
+
+Route::get('login/{token}', [
+    'uses' => 'LoginController@login',
+    'as' => 'login'
+]);
 
