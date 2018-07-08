@@ -52,4 +52,9 @@ class Token extends Model
     {
         Mail::to($this->user)->send(new TokenMail($this));
     }
+
+    public function getUrlAttribute()
+    {
+        return route('login', ['token' => $this->token]);
+    }
 }
