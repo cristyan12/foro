@@ -9,6 +9,8 @@
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ route('register') }}">
                         {{ csrf_field() }}
+
+                        {!! Alert::render() !!}
                         
                         {!! Field::email('email') !!}
                         
