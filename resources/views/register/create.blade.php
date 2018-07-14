@@ -12,13 +12,13 @@
 
                         {!! Alert::render() !!}
                         
-                        {!! Field::email('email') !!}
-                        
-                        {!! Field::text('username') !!}
-                        
                         {!! Field::text('first_name') !!}
 
                         {!! Field::text('last_name') !!}
+                        
+                        {!! Field::email('email') !!}
+                        
+                        {!! Field::text('username') !!}
                         
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
