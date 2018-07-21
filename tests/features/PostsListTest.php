@@ -20,6 +20,28 @@ class PostsListTest extends FeatureTestCase
     }
 
     /** @test */
+    function a_user_can_see_the_posts_filtered_by_status()
+    {
+        $pendingPost = factory(Post::class)->create([
+            'title' => 'Post pendiente',
+            'pending' => true
+        ]);
+
+        $completedPost = factory(Post::class)->create([
+            'title' => 'Post completado',
+            'pending' => false
+        ]);
+
+        $this->visitRoute('posts.pending')
+            ->see($pendingPost->title)
+            ->dontSee($completedPost->title);
+
+        $this->visitRoute('posts.completed')
+            ->see($completedPost->title)
+            ->dontSee($pendingPost->title);
+    }
+
+    /** @test */
     function a_user_can_see_post_filtered_by_category()
     {
         // Arrange

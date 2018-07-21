@@ -1,13 +1,34 @@
 <?php
 
-Route::get('{category?}', [
-	'uses' => 'ShowPostController@index',
-	'as' => 'posts.index'
-]);
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| This file is where you may define all of the routes that are handled
+| by your application. Just tell Laravel the URIs it should respond
+| to using a Closure or controller method. Build something great!
+|
+*/
 
 Route::get('/home', 'HomeController@index');
 
 Route::get('posts/{post}-{slug}', [
-	'uses' => 'ShowPostController@show',
-	'as' => 'posts.show'
+    'as' => 'posts.show',
+    'uses' => 'ShowPostController@show'
 ])->where('post', '\d+');
+
+Route::get('posts-pendientes', [
+    'uses' => 'ShowPostController@index',
+    'as' => 'posts.pending'
+]);
+
+Route::get('posts-completados', [
+    'uses' => 'ShowPostController@index',
+    'as' => 'posts.completed'
+]);
+
+Route::get('{category?}', [
+    'uses' => 'ShowPostController@index',
+    'as' => 'posts.index'
+]);
