@@ -1,6 +1,6 @@
 <?php
 
-Route::get('/', [
+Route::get('{category?}', [
 	'uses' => 'ShowPostController@index',
 	'as' => 'posts.index'
 ]);

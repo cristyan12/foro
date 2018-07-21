@@ -11,6 +11,12 @@ class PostTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Post::class, 100)->create();
+        $categories = \App\Category::select('id')->get();
+
+        foreach (range(1, 100) as $i) {
+            factory(\App\Post::class)->create([
+                'category_id' => $categories->random()->id
+            ]);
+        }
     }
 }
