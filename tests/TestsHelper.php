@@ -10,7 +10,7 @@ trait TestsHelper
 
     public function defaultUser(array $attributes = [])
     {
-        if ($this->defaultUser){
+        if ($this->defaultUser) {
             return $this->defaultUser;
         }
 

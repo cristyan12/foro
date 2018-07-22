@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+use App\{Category, Post};
 use Illuminate\Database\Seeder;
 
 class PostTableSeeder extends Seeder
@@ -11,11 +13,12 @@ class PostTableSeeder extends Seeder
      */
     public function run()
     {
-        $categories = \App\Category::select('id')->get();
+        $categories = Category::select('id')->get();
 
         foreach (range(1, 100) as $i) {
-            factory(\App\Post::class)->create([
-                'category_id' => $categories->random()->id
+            factory(Post::class)->create([
+                'category_id' => $categories->random()->id,
+                'created_at' => Carbon::now()->subHours(rand(0, 720)),
             ]);
         }
     }
