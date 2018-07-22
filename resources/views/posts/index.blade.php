@@ -22,10 +22,6 @@
         <div class="col-md-10">
             @each('posts.item', $posts, 'post')
 
-            {{-- @foreach($posts as $post)
-                @include('posts.item')
-            @endforeach --}}
-
             {{ $posts->render() }}
         </div>
     </div>
