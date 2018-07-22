@@ -9,11 +9,18 @@ class ShowPostController extends Controller
 {
 	public function index(Category $category = null, Request $request)
 	{
-        $posts = Post::orderBy('created_at', 'DESC')
-            ->scopes($this->getListScopes($category, $request))
+        $routeName = $request->route()->getName();
+
+        list($orderColumn, $orderDirection) = $this->getListOrder($request->get('orden'));
+
+        $posts = Post::query()
+            ->scopes($this->getListScopes($category, $routeName))
+            ->orderBy($orderColumn, $orderDirection)
             ->paginate();
 
-        $categoryItems = $this->getCategoryItems($request);
+        $posts->appends(request()->intersect(['orden']));
+
+        $categoryItems = $this->getCategoryItems($routeName);
 
 		return view('posts.index', compact('posts', 'category', 'categoryItems'));
 	}
@@ -27,34 +34,44 @@ class ShowPostController extends Controller
 		return view('posts.show', compact('post'));
 	}
 
-    protected function getCategoryItems(Request $request)
+    protected function getCategoryItems(string $routeName)
     {
-        return Category::orderBy('name')->get()->map(function ($category) use ($request) {
+        return Category::query()
+            ->orderBy('name')
+            ->get()
+            ->map(function ($category) use ($routeName) {
             return [
                 'title' => $category->name,
-                'full_url' => route($request->route()->getName(), $category)
+                'full_url' => route($routeName, $category)
             ];
         })->toArray();
     }
 
-    public function getListScopes(Category $category, Request $request)
+    protected function getListScopes(Category $category, string $routeName)
     {
         $scopes = [];
-
         if ($category->exists) {
             $scopes['category'] = [$category];
         }
-
-        $routeName = $request->route()->getName();
-
         if ($routeName == 'posts.pending') {
             $scopes[] = 'pending';
         }
-
         if ($routeName == 'posts.completed') {
             $scopes[] = 'completed';
         }
-
         return $scopes;
+    }
+
+    protected function getListOrder($order)
+    {
+        if ($order == 'recientes') {
+            return ['created_at', 'desc'];
+        }
+
+        if ($order == 'antiguos') {
+            return ['created_at', 'asc'];
+        }
+
+        return ['created_at', 'desc'];
     }
 }
