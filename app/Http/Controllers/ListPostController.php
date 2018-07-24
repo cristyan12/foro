@@ -41,15 +41,19 @@ class ListPostController extends Controller
     protected function getListScopes(Category $category, string $routeName)
     {
         $scopes = [];
+
         if ($category->exists) {
             $scopes['category'] = [$category];
         }
+
         if ($routeName == 'posts.pending') {
             $scopes[] = 'pending';
         }
+
         if ($routeName == 'posts.completed') {
             $scopes[] = 'completed';
         }
+        
         return $scopes;
     }
 
