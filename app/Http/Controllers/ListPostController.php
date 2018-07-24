@@ -25,17 +25,17 @@ class ListPostController extends Controller
         return view('posts.index', compact('posts', 'category', 'categoryItems'));
     }
 
-    protected function getCategoryItems(string $routeName)
+    protected function getListOrder($order)
     {
-        return Category::query()
-            ->orderBy('name')
-            ->get()
-            ->map(function ($category) use ($routeName) {
-            return [
-                'title' => $category->name,
-                'full_url' => route($routeName, $category)
-            ];
-        })->toArray();
+        if ($order == 'recientes') {
+            return ['created_at', 'desc'];
+        }
+
+        if ($order == 'antiguos') {
+            return ['created_at', 'asc'];
+        }
+
+        return ['created_at', 'desc'];
     }
 
     protected function getListScopes(Category $category, string $routeName)
@@ -53,16 +53,16 @@ class ListPostController extends Controller
         return $scopes;
     }
 
-    protected function getListOrder($order)
+    protected function getCategoryItems(string $routeName)
     {
-        if ($order == 'recientes') {
-            return ['created_at', 'desc'];
-        }
-
-        if ($order == 'antiguos') {
-            return ['created_at', 'asc'];
-        }
-
-        return ['created_at', 'desc'];
+        return Category::query()
+            ->orderBy('name')
+            ->get()
+            ->map(function ($category) use ($routeName) {
+            return [
+                'title' => $category->name,
+                'full_url' => route($routeName, $category)
+            ];
+        })->toArray();
     }
 }
