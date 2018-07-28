@@ -32,3 +32,8 @@ Route::get('{category?}', [
     'uses' => 'ListPostController',
     'as' => 'posts.index'
 ]);
+
+Route::get('mis-posts/{category?}', [
+    'uses' => 'ListPostController',
+    'as' => 'posts.mine'
+]);

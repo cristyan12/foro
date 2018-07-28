@@ -115,6 +115,23 @@ class PostsListTest extends FeatureTestCase
     }
 
     /** @test */
+    function a_user_can_see_it_own_posts()
+    {
+        // Arrange
+        $user = $this->defaultUser();
+
+        $userPost = $this->createPost(['user_id' => $user->id]);
+
+        $anotherUserPost = $this->createPost();
+
+        // Assert
+        $this->visitRoute('posts.index')
+            ->click('Mis posts')
+            ->see($userPost->title)
+            ->dontSee($anotherUserPost->title);
+    }
+
+    /** @test */
     function the_posts_are_paginated()
     {
         // Arrange

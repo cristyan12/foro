@@ -46,6 +46,10 @@ class ListPostController extends Controller
             $scopes['category'] = [$category];
         }
 
+        if ($routeName == 'posts.mine') {
+            $scopes['byUser'] = [auth()->user()];
+        }
+
         if ($routeName == 'posts.pending') {
             $scopes[] = 'pending';
         }
