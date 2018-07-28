@@ -9,45 +9,29 @@ class ListPostController extends Controller
 {
     public function __invoke(Category $category = null, Request $request)
     {
-        $routeName = $request->route()->getName();
-
         list($orderColumn, $orderDirection) = $this->getListOrder($request->get('orden'));
 
         $posts = Post::query()
-            ->scopes($this->getListScopes($category, $routeName))
+            ->scopes($this->getListScopes($category, $request))
             ->orderBy($orderColumn, $orderDirection)
-            ->paginate();
+            ->paginate()
+            ->appends($request->intersect(['orden']));
 
-        $posts->appends(request()->intersect(['orden']));
-
-        $categoryItems = $this->getCategoryItems($routeName);
-
-        return view('posts.index', compact('posts', 'category', 'categoryItems'));
+        return view('posts.index', compact('posts', 'category'));
     }
 
-    protected function getListOrder($order)
-    {
-        if ($order == 'recientes') {
-            return ['created_at', 'desc'];
-        }
-
-        if ($order == 'antiguos') {
-            return ['created_at', 'asc'];
-        }
-
-        return ['created_at', 'desc'];
-    }
-
-    protected function getListScopes(Category $category, string $routeName)
+    protected function getListScopes(Category $category, Request $request)
     {
         $scopes = [];
 
+        $routeName = $request->route()->getName();
+        
         if ($category->exists) {
             $scopes['category'] = [$category];
         }
 
         if ($routeName == 'posts.mine') {
-            $scopes['byUser'] = [auth()->user()];
+            $scopes['byUser'] = [$request->user()]; 
         }
 
         if ($routeName == 'posts.pending') {
@@ -61,16 +45,16 @@ class ListPostController extends Controller
         return $scopes;
     }
 
-    protected function getCategoryItems(string $routeName)
+    protected function getListOrder($order)
     {
-        return Category::query()
-            ->orderBy('name')
-            ->get()
-            ->map(function ($category) use ($routeName) {
-            return [
-                'title' => $category->name,
-                'full_url' => route($routeName, $category)
-            ];
-        })->toArray();
+        if ($order == 'recientes') {
+            return ['created_at', 'desc'];
+        }
+
+        if ($order == 'antiguos') {
+            return ['created_at', 'asc'];
+        }
+
+        return ['created_at', 'desc'];
     }
 }

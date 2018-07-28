@@ -29,6 +29,7 @@ return [
         'mine' => [
             'title' => 'Mis posts',
             'route' => 'posts.mine',
+            'logged' => true,
         ],
     ],
 

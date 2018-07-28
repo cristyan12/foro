@@ -12,9 +12,9 @@ class PostSidebarComposer
 
     public function compose(View $view)
     {
-        $view->filters = trans('menu.filters');
-        
         $view->categoryItems = $this->getCategoryItems();
+        
+        $view->filters = trans('menu.filters');
     }
 
     protected function getCategoryItems()
