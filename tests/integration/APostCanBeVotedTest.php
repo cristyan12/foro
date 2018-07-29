@@ -20,7 +20,7 @@ class APostCanBeVotedTest extends TestCase
     }
 
     /** @test */
-    function a_post_can_be_voted()
+    function a_post_can_be_upvoted()
     {
         // Act
         Vote::upvote($this->post);
@@ -97,5 +97,21 @@ class APostCanBeVotedTest extends TestCase
         // Assert
         $this->assertSame(1, Vote::count());
         $this->assertSame(1, $this->post->score);
+    }
+
+    /** @test */
+    function the_post_score_is_calculated_correctly()
+    {
+        Vote::create([
+            'post_id' => $this->post->id,
+            'user_id' => $this->anyone()->id,
+            'vote' => 1,
+        ]);
+
+        Vote::upvote($this->post);
+
+        // Assert
+        $this->assertSame(2, Vote::count());
+        $this->assertSame(2, $this->post->score);
     }
 }
