@@ -10,12 +10,23 @@ class Vote extends Model
 
     public static function upvote(Post $post)
     {
-        self::create([
-            'user_id' => auth()->id(),
-            'post_id' => $post->id,
-            'vote' => 1,
-        ]);
+        static::addVote($post, 1);
+    }
 
-        $post->score = 1;
+    public static function downvote(Post $post)
+    {
+        static::addVote($post, -1);
+    }
+
+    public static function addVote(Post $post, $amount)
+    {
+        static::updateOrCreate(
+            ['post_id' => $post->id, 'user_id' => auth()->id()],
+            ['vote' => $amount]
+        );
+
+        $post->score = $amount;
+
+        $post->save();
     }
 }
