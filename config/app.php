@@ -229,7 +229,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Access' => Styde\Html\Facades\Access::class,
         'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
-
+        'PHPUnit_Framework_Constraint' => PHPUnit\Framework\Constraint\Constraint::class,
     ],
 
 ];
