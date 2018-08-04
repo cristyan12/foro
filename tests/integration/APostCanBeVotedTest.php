@@ -23,7 +23,7 @@ class APostCanBeVotedTest extends TestCase
     function a_post_can_be_upvoted()
     {
         // Act
-        Vote::upvote($this->post);
+        $this->post->upvote();
 
         // Assert
         $this->assertDatabaseHas('votes', [
@@ -39,11 +39,13 @@ class APostCanBeVotedTest extends TestCase
     function a_post_cannot_be_upvoted_twice_by_the_same_user()
     {
         // Act
-        Vote::upvote($this->post);
-        Vote::upvote($this->post);
+        $this->post->upvote();
+
+        $this->post->upvote();
 
         // Assert
         $this->assertSame(1, Vote::count());
+
         $this->assertSame(1, $this->post->score);
     }
 
@@ -51,7 +53,7 @@ class APostCanBeVotedTest extends TestCase
     function a_post_can_be_downvoted()
     {
         // Act
-        Vote::downvote($this->post);
+        $this->post->downvote();
         
         // Assert
         $this->assertDatabaseHas('votes', [
@@ -67,11 +69,13 @@ class APostCanBeVotedTest extends TestCase
     function a_post_cannot_be_downvoted_twice_by_the_same_user()
     {
         // Act
-        Vote::downvote($this->post);
-        Vote::downvote($this->post);
+        $this->post->downvote();
+
+        $this->post->downvote();
 
         // Assert
         $this->assertSame(1, Vote::count());
+
         $this->assertSame(-1, $this->post->score);
     }
 
@@ -79,11 +83,13 @@ class APostCanBeVotedTest extends TestCase
     function a_user_can_switch_from_upvote_to_downvote()
     {
         // Act
-        Vote::upvote($this->post);
-        Vote::downvote($this->post);
+        $this->post->upvote();
+        
+        $this->post->downvote();
 
         // Assert
         $this->assertSame(1, Vote::count());
+        
         $this->assertSame(-1, $this->post->score);
     }
 
@@ -91,11 +97,13 @@ class APostCanBeVotedTest extends TestCase
     function a_user_can_switch_from_downvote_to_upvote()
     {
         // Act
-        Vote::downvote($this->post);
-        Vote::upvote($this->post);
+        $this->post->downvote();
+
+        $this->post->upvote();
 
         // Assert
         $this->assertSame(1, Vote::count());
+
         $this->assertSame(1, $this->post->score);
     }
 
@@ -108,19 +116,20 @@ class APostCanBeVotedTest extends TestCase
             'vote' => 1,
         ]);
 
-        Vote::upvote($this->post);
+        $this->post->upvote();
 
         // Assert
         $this->assertSame(2, Vote::count());
+        
         $this->assertSame(2, $this->post->score);
     }
 
     /** @test */
     function the_post_can_be_unvoted()
     {
-        Vote::upvote($this->post);
+        $this->post->upvote();
 
-        Vote::undoVote($this->post);
+        $this->post->undoVote();
 
         $vote = Vote::first();
 
