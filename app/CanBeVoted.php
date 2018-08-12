@@ -4,6 +4,16 @@ namespace App;
 
 trait CanBeVoted
 {
+    public function getCurrentVoteAttribute()
+    {
+        return $this->getVoteFrom(auth()->user());
+    }
+
+    public function getVoteFrom(User $user)
+    {
+        return Vote::where('user_id', auth()->id())->value('vote');
+    }
+
     public function upvote()
     {
         $this->addVote(1);
