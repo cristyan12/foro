@@ -2,11 +2,12 @@
     <div>
         <form>
             <button @click.prevent="upvote"
-                    :class="currentVote  == 1 ? 'btn-primary' : 'btn-default'"
+                    :class="currentVote == 1 ? 'btn-primary' : 'btn-default'"
                     class="btn">+1</button>
             Puntuación actual: <strong id="current-score">{{ currentScore }}</strong>
             <button @click.prevent="downvote"
-                    class="btn btn-default">-1</button>
+                    :class="currentVote == -1 ? 'btn-primary' : 'btn-default'"
+                    class="btn">-1</button>
         </form>
     </div>
 </template>
@@ -16,28 +17,31 @@
         props: ['score', 'vote'],
         data() {
             return {
-                currentVote: this.vote,
-                currentScore: this.score,
+                currentVote: this.vote ? parseInt(this.vote) : null,
+                currentScore: parseInt(this.score),
             }
         },
         methods: {
             upvote() {
-                if (this.currentVote == 1) {
-                    this.currentScore--;
+                this.addVote(1);
+            },
+            downvote() {
+                this.addVote(-1);
+            },
+            addVote(amount) {
+                if (this.currentVote == amount) {
+                    this.currentScore -= this.currentVote;
 
                     axios.delete(window.location.href + '/vote');
 
                     this.currentVote = null;
                 } else {
-                    this.currentScore++;
+                    this.currentScore += this.currentVote ? (amount * 2) : amount;
 
-                    axios.post(window.location.href + '/upvote');
+                    axios.post(window.location.href + (amount == 1 ? '/upvote' : '/downvote'));
 
-                    this.currentVote = 1;
+                    this.currentVote = amount;
                 }
-            },
-            downvote() {
-                
             }
         }
     }

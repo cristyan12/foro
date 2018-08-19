@@ -43344,13 +43344,48 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['score', 'vote'],
+    data: function data() {
+        return {
+            currentVote: this.vote,
+            currentScore: this.score
+        };
+    },
+
     methods: {
         upvote: function upvote() {
-            axios.post(window.location.href + '/upvote');
+            if (this.currentVote == 1) {
+                this.currentScore--;
+
+                axios.delete(window.location.href + '/vote');
+
+                this.currentVote = null;
+            } else {
+                this.currentScore++;
+
+                axios.post(window.location.href + '/upvote');
+
+                this.currentVote = 1;
+            }
         },
-        downvote: function downvote() {}
+        downvote: function downvote() {
+            if (this.currentVote == -1) {
+                this.currentScore++;
+
+                axios.delete(window.location.href + '/vote');
+
+                this.currentVote = null;
+            } else {
+                this.currentScore--;
+
+                axios.post(window.location.href + '/downvote');
+
+                this.currentVote = -1;
+            }
+        }
     }
 });
 
@@ -43367,7 +43402,8 @@ var render = function() {
       _c(
         "button",
         {
-          staticClass: "btn btn-default",
+          staticClass: "btn",
+          class: _vm.currentVote == 1 ? "btn-primary" : "btn-default",
           on: {
             click: function($event) {
               $event.preventDefault()
@@ -43377,8 +43413,10 @@ var render = function() {
         },
         [_vm._v("+1")]
       ),
-      _vm._v("\r\n        Puntuación actual: "),
-      _c("strong", { attrs: { id: "current-score" } }, [_vm._v("5")]),
+      _vm._v("\n        Puntuación actual: "),
+      _c("strong", { attrs: { id: "current-score" } }, [
+        _vm._v(_vm._s(_vm.currentScore))
+      ]),
       _vm._v(" "),
       _c(
         "button",

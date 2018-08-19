@@ -27,11 +27,11 @@
         @if (auth()->check())
             @if (! auth()->user()->isSubscribedTo($post))
                 {!! Form::open(['route' => ['posts.subscribe', $post], 'method' => 'POST']) !!}
-                    <button class="btn btn-default" type="submit">Suscribirse al post</button>
+                    <button class="btn btn-primary" type="submit">Suscribirse al post</button>
                 {!! Form::close() !!}
             @else
                 {!! Form::open(['route' => ['posts.unsubscribe', $post], 'method' => 'DELETE']) !!}
-                    <button class="btn btn-default" type="submit">Desuscribirse del post</button>
+                    <button class="btn btn-primary" type="submit">Desuscribirse del post</button>
                 {!! Form::close() !!}
             @endif
         @endif
