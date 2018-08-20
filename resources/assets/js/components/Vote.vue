@@ -3,10 +3,12 @@
         <form>
             <button @click.prevent="upvote"
                     :class="currentVote == 1 ? 'btn-primary' : 'btn-default'"
+                    :disabled="voteInProgress"
                     class="btn">+1</button>
             Puntuación actual: <strong id="current-score">{{ currentScore }}</strong>
             <button @click.prevent="downvote"
                     :class="currentVote == -1 ? 'btn-primary' : 'btn-default'"
+                    :disabled="voteInProgress"
                     class="btn">-1</button>
         </form>
     </div>
@@ -19,6 +21,7 @@
             return {
                 currentVote: this.vote ? parseInt(this.vote) : null,
                 currentScore: parseInt(this.score),
+                voteInProgress: false,
             }
         },
         methods: {
@@ -30,18 +33,32 @@
             },
             addVote(amount) {
                 if (this.currentVote == amount) {
-                    this.currentScore -= this.currentVote;
+                    this.voteInProgress = true;
 
-                    axios.delete(window.location.href + '/vote');
+                    this.processRequest('delete', 'vote');
 
                     this.currentVote = null;
                 } else {
-                    this.currentScore += this.currentVote ? (amount * 2) : amount;
+                    this.voteInProgress = true;
 
-                    axios.post(window.location.href + (amount == 1 ? '/upvote' : '/downvote'));
+                    this.processRequest('post', 'vote/' + amount);
 
                     this.currentVote = amount;
                 }
+            },
+            processRequest(method, action) {
+                axios[method](this.buildUrl(action)).then((response) => {
+                    this.currentScore = response.data.new_score;
+
+                    this.voteInProgress = false;
+                }).catch((thrown) => {
+                    alert('Ocurrió un error!');
+
+                    this.voteInProgress = false;
+                });                
+            },
+            buildUrl(action) {
+                return window.location.href + '/' + action;
             }
         }
     }
