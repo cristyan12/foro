@@ -9,6 +9,7 @@
 
 <div class="row">
     <div class="col-md-8">
+
         <p>
             Publicado por <a href="#">{{ $post->user->name }}</a>
             {{ $post->created_at->diffForHumans() }}
@@ -20,7 +21,7 @@
             @endif
         </p>
 
-        <app-vote score="{{ $post->score }}" vote="{{ $post->current_vote }}"></app-vote>
+        {!! $post->vote_component !!}
         
         {!! $post->safe_html_content !!}
         
