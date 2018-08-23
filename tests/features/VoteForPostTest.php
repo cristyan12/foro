@@ -23,7 +23,8 @@ class VoteForPostTest extends TestCase
         // Assert
         $this->assertDatabaseHas('votes', [
             'user_id' => $user->id,
-            'post_id' => $post->id,
+            'votable_id' => $post->id,
+            'votable_type' => App\Post::class,
             'vote' => 1,
         ]);
 
@@ -46,7 +47,8 @@ class VoteForPostTest extends TestCase
         // Assert
         $this->assertDatabaseHas('votes', [
             'user_id' => $user->id,
-            'post_id' => $post->id,
+            'votable_id' => $post->id,
+            'votable_type' => App\Post::class,
             'vote' => -1,
         ]);
 
