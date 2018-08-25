@@ -16,7 +16,7 @@
 
 <script>
     export default {
-        props: ['score', 'vote', 'post_id'],
+        props: ['score', 'vote', 'id', 'module'],
         data() {
             return {
                 currentVote: this.vote ? parseInt(this.vote) : null,
@@ -58,7 +58,7 @@
                 });                
             },
             buildUrl(action) {
-                return '/posts/' + this.post_id + '/' + action;
+                return '/' + this.module + '/' + this.id + '/' + action;
             }
         }
     }

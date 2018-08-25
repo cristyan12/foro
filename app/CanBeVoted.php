@@ -18,13 +18,21 @@ trait CanBeVoted
         }
     }
 
+    /**
+    * Renders the Vue vote component.
+    *
+    * @return string
+    */
     public function getVoteComponentAttribute()
     {
-        return Html::tag('app-vote', '', [
-            'post_id' => $this->id,
-            'score' => $this->score,
-            'vote' => $this->current_vote,
-        ]);
+        if (auth()->check()) {
+            return Html::tag('app-vote', '', [
+                'module' => $this->getTable(),
+                'id' => $this->id,
+                'score' => $this->score,
+                'vote' => $this->current_vote,
+            ]);    
+        }
     }
 
     public function getVoteFrom(User $user)

@@ -19,7 +19,7 @@ class VoteForCommentTest extends TestCase
         $this->comment = factory(Comment::class)->create();
     }
 
-    //** @test */
+    /** @test */
     function a_user_can_upvote_for_a_comment()
     {
         // Act
@@ -35,5 +35,55 @@ class VoteForCommentTest extends TestCase
         $this->assertSame(1, $this->comment->current_vote);
 
         $this->assertSame(1, $this->comment->score);
+    }
+
+    /** @test */
+    function a_user_can_downvote_for_a_comment()
+    {
+        $this->postJson("comments/{$this->comment->id}/vote/-1")
+            ->assertSuccessful()
+            ->assertJson([
+                'new_score' => -1
+            ]);
+
+        $this->comment->refresh();
+
+        $this->assertSame(-1, $this->comment->current_vote);
+
+        $this->assertSame(-1, $this->comment->score);
+    }
+
+    /** @test */
+    function a_user_can_unvote_a_comment()
+    {
+        $this->comment->upvote();
+
+        $this->deleteJson("comments/{$this->comment->id}/vote/")
+            ->assertSuccessful()
+            ->assertJson([
+                'new_score' => 0
+            ]);
+
+        $this->comment->refresh();
+
+        $this->assertNull($this->comment->current_vote);
+
+        $this->assertSame(0, $this->comment->score);
+    }
+
+    /** @test */
+    function a_guest_user_cannot_vote_for_a_comment()
+    {
+        auth()->logout();
+
+        $this->postJson("comments/{$this->comment->id}/vote/1")
+            ->assertStatus(401)
+            ->assertJson(['error' => 'Unauthenticated.']);
+
+        $this->comment->refresh();
+
+        $this->assertNull($this->comment->current_vote);
+
+        $this->assertSame(0, $this->comment->score);
     }
 }
