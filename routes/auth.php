@@ -1,11 +1,10 @@
 <?php
 
 // Routes that requires authentication
-Route::post('logout', function () {
-    auth()->logout();
-
-    return redirect('/');
-});
+Route::post('logout', [
+    'uses' => 'LoginController@logout',
+    'as' => 'logout'
+]);
 
 // Posts
 Route::get('posts/create', [
